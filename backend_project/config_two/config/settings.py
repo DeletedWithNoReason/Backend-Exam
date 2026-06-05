@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = 'users:login_view'
 LOGIN_REDIRECT_URL = 'academics:dashboard'
+CSRF_TRUSTED_ORIGINS = ['https://branch-management-service.onrender.com']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
