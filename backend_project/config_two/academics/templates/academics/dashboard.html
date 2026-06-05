@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<title>Dashboard</title>
+<h1>Dashboard</h1>
+
+{% if branches %}
+    <ul>
+    {% for branch in branches %}
+    <p><a href="{% url 'academics:branch_detail' branch.id %}">{{ branch.name }}</a> {% if branch.status == 'archived' %}(Archived){% endif %}</p>
+{% endfor %}
+    </ul>
+{% else %}
+    <p>No active branches found.</p>
+{% endif %}
+
+{% endblock %}

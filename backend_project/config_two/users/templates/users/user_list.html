@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>User List</h1>
+
+<h2>Head Administration</h2>
+<ul>
+    {% for user in admins %}
+        <li><a href="{% url 'users:user_detail' user.id %}">{{ user.first_name }} {{ user.last_name }} ({{ user.phone }})</a></li>
+    {% empty %}
+        <li>No administrators found.</li>
+    {% endfor %}
+</ul>
+<h2>Branch Administrators</h2>
+<ul>
+    {% for user in managers %}
+        <li><a href="{% url 'users:user_detail' user.id %}">{{ user.first_name }} {{ user.last_name }} ({{ user.phone }})</a></li>
+    {% empty %}
+        <li>No branch administrators found.</li>
+    {% endfor %}
+</ul>
+<h2>Teachers</h2>
+<ul>
+    {% for user in teachers %}
+        <li><a href="{% url 'users:user_detail' user.id %}">{{ user.first_name }} {{ user.last_name }} ({{ user.phone }})</a></li>
+    {% empty %}
+        <li>No teachers found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

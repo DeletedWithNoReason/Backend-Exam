@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>User Details</h1>
+    <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+    <p>Phone: {{ user.phone }}</p>
+    <p>Email: {{ user.email }}</p>
+    {% if user.role == 'admin' %}
+        <p>Status: {{ user.get_status_display }}</p>
+    {% endif %}
+    <p>Role: {{ user.get_role_display }}</p>
+    {% if branch %}
+        <p>Assigned Branch: <a href="{% url 'academics:branch_detail' branch.id %}">{{ branch.name }}</a></p>
+    {% else %}
+        <p>No branch assigned.</p>
+    {% endif %}
+    <a href="{% url 'academics:dashboard' %}">Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ lesson.name }} Details</h1>
+<p>Type: {{ lesson.get_lesson_type_display }}</p>
+<p>Subject: <a href="{% url 'academics:subject_detail' branch.id lesson.subject.id %}">{{ lesson.subject.name }}</a></p>
+<p>Teacher: <a href="{% url 'users:user_detail' lesson.teacher.id %}">{{ lesson.teacher.first_name }} {{ lesson.teacher.last_name }}</a></p>
+<p>Group: <a href="{% url 'academics:group_detail' branch.id lesson.group.id %}">{{ lesson.group.name }}</a></p>
+<p>Status: <strong>{{ lesson.get_status_display }}</strong></p>
+<p>Start Time: {{ lesson.start_at }}</p>
+<hr>
+<h2>Attendance</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    
+    <table class="student-table">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Status</th>
+                <th>Mark</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in formset %}
+                <tr>
+                    <td>
+                        {{ form.id }}
+                        {{ form.instance.student.first_name }} {{ form.instance.student.last_name }}
+                    </td>
+                    <td>{{ form.status }}</td>
+                    <td>{{ form.mark }}</td>
+                    <td>{{ form.commentary }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No students enrolled in this group/lesson.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    
+    {% if lesson.status == 'scheduled' %}
+        <button type="submit" class="btn btn-primary">Save Attendance</button>
+        
+        <button type="submit" name="end_lesson" class="btn btn-danger" 
+                onclick="return confirm('Are you sure you want to end this lesson?');" 
+                style="margin-left: 10px;">
+            End the lesson
+        </button>
+    {% else %}
+        <p><em>This lesson is closed. Attendance and status cannot be modified.</em></p>
+    {% endif %}
+</form>
+
+{% endblock %}

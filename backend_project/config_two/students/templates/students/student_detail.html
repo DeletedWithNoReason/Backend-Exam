@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Student Information{% endblock %}
+{% block content %}
+<h1>Student Information</h1>
+<p>Name: {{ student.first_name }} {{ student.last_name }}</p>
+<p>Phone: {{ student.phone }}</p>
+<p>Email: {{ student.email }}</p>
+<p>Date of Birth: {{ student.dob }}</p>
+<p>Address: {{ student.address }}</p>
+{% if user.role == 'admin' %}
+    <p>Status: {{ student.get_status_display }}</p>
+{% endif %}
+<h2>Parent/Guardian Information</h2>
+{% if parents %}
+    <ul>
+    {% for parent in parents %}
+        <li>
+            Name: {{ parent.name }}<br>
+            Phone: {{ parent.phone }}<br>
+            Email: {{ parent.email }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No parent/guardian information available.</p>
+{% endif %}
+<hr>
+<h2>Assigned Branch: <a href="{% url 'academics:branch_detail' student.branch.id %}">{{ student.branch.name }}</a></h2>
+{% if student.group %}
+        <a href="{% url 'academics:group_detail' student.group.id %}">{{ student.group.name }}</a>
+    {% else %}
+        No group assigned
+    {% endif %}
+{% endblock %}

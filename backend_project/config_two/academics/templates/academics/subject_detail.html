@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Subject Details{% endblock %}
+
+{% block content %}
+<h1>Subject Details</h1>
+<p>Name: {{ subject.name }}</p>
+<p>Branch: <a href="{% url 'academics:branch_detail' subject.branch.id %}">{{ subject.branch.name }}</a></p>
+<p>Status: {{ subject.get_status_display }}</p>
+<hr>
+<h2>{{ subject.name }} Groups</h2>
+{% if groups %}
+    <ul>
+    {% for group in groups %}
+        <li><a href="{% url 'academics:group_detail' subject.branch.id group.pk %}">{{ group.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No groups assigned to this subject.</p>
+{% endif %}
+<a href="{% url 'academics:branch_detail' subject.branch.id %}">Back to Branch</a>
+{% endblock %}

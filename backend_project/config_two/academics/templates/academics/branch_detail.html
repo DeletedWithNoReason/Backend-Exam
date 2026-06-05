@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ branch.name }}</h1>
+    <p>{{ branch.description }}</p>
+    <p>City: {{ branch.city }}</p>
+    <p>Address: {{ branch.address }}</p>
+    {% if user.role == 'admin' %}
+        <p>Status: {{ branch.get_status_display }}</p>
+    {% endif %}
+
+    <h2>Branch Members</h2>
+    {% if staff_members %} <ul>
+        {% for staff_member in staff_members %} <li><a href="{% url 'users:user_detail' staff_member.id %}">{{ staff_member.first_name }} {{ staff_member.last_name }} ({{ staff_member.phone }})</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No staff members assigned to this branch.</p>
+    {% endif %}
+
+    <h2>Branch Subjects</h2>
+    {% if branch.subjects.all %}
+        <ul>
+        {% for subject in branch.subjects.all %}
+            <li><a href="{% url 'academics:subject_detail' branch.id subject.id %}">{{ subject.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No subjects assigned to this branch.</p>
+    {% endif %}
+
+    <hr>
+    
+    <style>
+        .schedule-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .schedule-table {
+            flex: 1;            
+            min-width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #EAEAEA;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #EAEAEA;
+        }
+    </style>
+
+    <h2>Lesson Schedule</h2>
+
+    <div class="schedule-container">
+        <table class="schedule-table">
+            <thead>
+                <tr><th colspan="3">Scheduled</th></tr>
+            </thead>
+            <tbody>
+            {% for lesson in scheduled %}
+                <tr>
+                    <td><a href="{% url 'academics:lesson_detail' branch.id lesson.id %}">{{ lesson.name }}</a></td>
+                    <td>{{ lesson.start_at|date:"d M, H:i" }}</td>
+                    <td>{{ lesson.group.name }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No scheduled lessons</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="schedule-table">
+            <thead>
+                <tr><th colspan="3">Completed</th></tr>
+            </thead>
+            <tbody>
+            {% for lesson in completed %}
+                <tr>
+                    <td><a href="{% url 'academics:lesson_detail' branch.id lesson.id %}">{{ lesson.name }}</a></td>
+                    <td>{{ lesson.start_at|date:" H:i, d M Y" }}</td>
+                    <td>{{ lesson.group.name }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No completed lessons</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="schedule-table">
+            <thead>
+                <tr><th colspan="3">Canceled</th></tr>
+            </thead>
+            <tbody>
+            {% for lesson in canceled %}
+                <tr>
+                    <td><a href="{% url 'academics:lesson_detail' branch.id lesson.id %}">{{ lesson.name }}</a></td>
+                    <td>{{ lesson.start_at|date:"d M, H:i" }}</td>
+                    <td>{{ lesson.group.name }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No canceled lessons</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

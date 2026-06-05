@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+    body {
+    background-color: #ffffff; /* Темно-сірий, майже чорний */
+    color: #121212;            /* Білий текст */
+    font-family: sans-serif;   /* Рекомендую встановити шрифт для всього сайту */
+    a {
+        color: #4da6ff; /* Приємний яскраво-блакитний, добре читається на темно-сірому */
+        text-decoration: none; /* За бажанням можна прибрати підкреслення */
+        transition: color 0.3s ease; /* Плавна зміна кольору */
+    }
+
+    /* Стан відвіданого посилання */
+    a:visited {
+        color: #b386ff; /* Світло-фіолетовий, щоб ви бачили, де були, але він не "різав" очі */
+    }
+
+    /* Стан при наведенні курсору */
+    a:hover {
+        color: #121212; /* Посилання стає білим при наведенні для інтерактивності */
+        text-decoration: underline; /* Додаємо підкреслення при наведенні */
+    }
+
+    /* Стан активного посилання (в момент кліку) */
+    a:active {
+        color: #ff9999; /* Легкий акцентний колір під час натискання */
+    }
+    }
+    </style>
+    {% if user.is_authenticated %}
+        <a href="{% url 'academics:dashboard' %}">Dashboard</a>
+        <a href="{% url 'users:user_list' %}">Users</a>
+        <a href="{% url 'students:student_list' %}">Students</a>
+        
+        {% if user.role == 'admin' %}
+        <a href="/admin/" target="_blank" rel="noopener noreferrer" style="font-weight: bold;">Django Admin</a>
+        {% endif %}
+
+        <p>{{ user.first_name }} {{ user.last_name }} ({{ user.get_role_display }})</p>
+        <a href="{% url 'users:logout_view' %}">Logout</a>
+        <a href="{% url 'rest_framework:login' %}?next=/api/v1/">DRF Auth (API)</a>
+        <hr>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

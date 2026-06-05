@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Group Details{% endblock %}
+{% block content %}
+<h1>Group Details</h1>
+<p>Name: {{ group.name }}</p>
+<p>Branch: <a href="{% url 'academics:branch_detail' group.branch.id %}">{{ group.branch.name }}</a></p>
+{% if user.role == 'admin' %}
+    <p>Status: {{ group.get_status_display }}</p>
+{% endif %}
+<hr>
+<h2>{{ group.name }} Subjects</h2>
+{% if subjects %}
+    <ul>
+    {% for subject in subjects %}
+        <li><a href="{% url 'academics:subject_detail' group.branch.id subject.pk %}">{{ subject.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No subjects assigned to this group.</p>
+{% endif %}
+<h2>{{ group.name }} Students</h2>
+{% if students %}
+    <ul>
+    {% for student in students %}
+        <li>
+            <a href="{% url 'students:student_detail' student.id %}">
+                {% if user.role == 'admin' %}
+                    {{ student.get_full_name_with_status }}
+                {% else %}
+                    {{ student.first_name }} {{ student.last_name }}
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No students assigned to this group.</p>
+{% endif %}
+{% endblock %}
